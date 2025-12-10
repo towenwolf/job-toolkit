@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""
+Scheduler for running job search on a configurable schedule
+"""
+import schedule
+import time
+import yaml
+from job_toolkit import JobToolkit
+
+
+def load_schedule_config():
+    """Load schedule configuration from config.yaml"""
+    try:
+        with open('config.yaml', 'r') as f:
+            config = yaml.safe_load(f)
+            return config.get('schedule', {})
+    except FileNotFoundError:
+        print("Warning: config.yaml not found, using default schedule")
+        return {}
+
+
+def run_job_search():
+    """Run the job search"""
+    try:
+        toolkit = JobToolkit()
+        toolkit.run()
+    except Exception as e:
+        print(f"Error running job search: {str(e)}")
+
+
+def main():
+    """Main scheduler loop"""
+    schedule_config = load_schedule_config()
+    
+    # Get schedule time (default: 8:00 AM)
+    schedule_time = schedule_config.get('time', '08:00')
+    
+    # Get days to run (default: Monday-Friday)
+    days = schedule_config.get('days', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
+    
+    print(f"Scheduling job search for {schedule_time} on: {', '.join(days)}")
+    
+    # Schedule the job for specified days
+    for day in days:
+        day_lower = day.lower()
+        if day_lower == 'monday':
+            schedule.every().monday.at(schedule_time).do(run_job_search)
+        elif day_lower == 'tuesday':
+            schedule.every().tuesday.at(schedule_time).do(run_job_search)
+        elif day_lower == 'wednesday':
+            schedule.every().wednesday.at(schedule_time).do(run_job_search)
+        elif day_lower == 'thursday':
+            schedule.every().thursday.at(schedule_time).do(run_job_search)
+        elif day_lower == 'friday':
+            schedule.every().friday.at(schedule_time).do(run_job_search)
+        elif day_lower == 'saturday':
+            schedule.every().saturday.at(schedule_time).do(run_job_search)
+        elif day_lower == 'sunday':
+            schedule.every().sunday.at(schedule_time).do(run_job_search)
+    
+    print("Scheduler started. Waiting for scheduled time...")
+    
+    # Keep the scheduler running
+    while True:
+        schedule.run_pending()
+        time.sleep(60)  # Check every minute
+
+
+if __name__ == "__main__":
+    main()
