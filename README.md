@@ -17,13 +17,32 @@ Job Toolkit automates the tedious task of searching for jobs by leveraging your 
 
 ## Quick Start
 
+> 📖 **New to Job Toolkit?** Check out [QUICKSTART.md](QUICKSTART.md) for a step-by-step guide!
+
 ### Prerequisites
 
 - Docker and docker-compose installed
 - OpenAI API key (ChatGPT subscription)
 - SMTP email server access (e.g., Gmail with app password)
 
-### Setup
+### Setup (Easy Mode)
+
+```bash
+# 1. Setup config files
+make setup
+
+# 2. Edit .env and config.yaml with your details
+nano .env
+nano config.yaml
+
+# 3. Test your configuration
+make test
+
+# 4. Start the scheduler
+make start
+```
+
+### Setup (Manual)
 
 1. **Clone the repository**
    ```bash
