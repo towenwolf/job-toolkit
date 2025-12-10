@@ -1,10 +1,10 @@
-# Job Toolkit
+# Find Job
 
 Automated job search system that sends daily email recommendations using ChatGPT.
 
 ## Overview
 
-Job Toolkit automates the tedious task of searching for jobs by leveraging your ChatGPT subscription to find and recommend the top 5 jobs matching your criteria. Results are formatted and emailed to you on a configurable schedule, perfect for running on a home server with Docker.
+Find Job automates the tedious task of searching for jobs by leveraging your ChatGPT subscription to find and recommend the top 5 jobs matching your criteria. Results are formatted and emailed to you on a configurable schedule, perfect for running on a home server with Docker.
 
 ## Features
 
@@ -17,7 +17,7 @@ Job Toolkit automates the tedious task of searching for jobs by leveraging your 
 
 ## Quick Start
 
-> 📖 **New to Job Toolkit?** Check out [QUICKSTART.md](QUICKSTART.md) for a step-by-step guide!
+> 📖 **New to Find Job?** Check out [QUICKSTART.md](QUICKSTART.md) for a step-by-step guide!
 
 ### Prerequisites
 
@@ -46,8 +46,8 @@ make start
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/towenwolf/job-toolkit.git
-   cd job-toolkit
+   git clone https://github.com/towenwolf/find-job.git
+   cd find-job
    ```
 
 2. **Create configuration files**
@@ -177,7 +177,7 @@ docker-compose down
 
 ```bash
 # Run a single job search without scheduling
-docker-compose run --rm job-toolkit python job_toolkit.py
+docker-compose run --rm find-job python find_job.py
 ```
 
 ### Local Development
@@ -187,7 +187,7 @@ docker-compose run --rm job-toolkit python job_toolkit.py
 pip install -r requirements.txt
 
 # Run once
-python job_toolkit.py
+python find_job.py
 
 # Run scheduler
 python scheduler.py
@@ -196,8 +196,8 @@ python scheduler.py
 ## Project Structure
 
 ```
-job-toolkit/
-├── job_toolkit.py          # Core job search and email logic
+find-job/
+├── find_job.py             # Core job search and email logic
 ├── scheduler.py            # Scheduling system
 ├── requirements.txt        # Python dependencies
 ├── config.example.yaml     # Example configuration
@@ -239,12 +239,12 @@ max_tokens: 2000
 
 ### Custom Email Template
 
-Modify the `format_email()` method in `job_toolkit.py` to customize the HTML template.
+Modify the `format_email()` method in `find_job.py` to customize the HTML template.
 
 ### Add More Features
 
 The codebase is designed to be extensible. Key areas:
-- `job_toolkit.py`: Core logic for job search and email
+- `find_job.py`: Core logic for job search and email
 - `scheduler.py`: Scheduling and automation
 - `config.yaml`: User configuration
 

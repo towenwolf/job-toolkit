@@ -1,11 +1,11 @@
 .PHONY: help setup start stop logs test restart clean
 
 help:
-	@echo "Job Toolkit - Available Commands"
+	@echo "Find Job - Available Commands"
 	@echo ""
 	@echo "  make setup     - Create config files from examples"
-	@echo "  make start     - Start the job toolkit scheduler"
-	@echo "  make stop      - Stop the job toolkit"
+	@echo "  make start     - Start the find job scheduler"
+	@echo "  make stop      - Stop the find job"
 	@echo "  make logs      - View logs"
 	@echo "  make test      - Run a one-time job search"
 	@echo "  make restart   - Restart the service"
@@ -34,24 +34,24 @@ setup:
 
 start:
 	docker compose up -d
-	@echo "✓ Job Toolkit started"
+	@echo "✓ Find Job started"
 	@echo "  View logs: make logs"
 
 stop:
 	docker compose down
-	@echo "✓ Job Toolkit stopped"
+	@echo "✓ Find Job stopped"
 
 logs:
 	docker compose logs -f
 
 test:
-	docker compose run --rm job-toolkit python job_toolkit.py
+	docker compose run --rm find-job python find_job.py
 
 restart:
 	docker compose restart
-	@echo "✓ Job Toolkit restarted"
+	@echo "✓ Find Job restarted"
 
 clean:
 	docker compose down -v
-	docker rmi job-toolkit-job-toolkit 2>/dev/null || true
+	docker rmi job-toolkit-find-job 2>/dev/null || true
 	@echo "✓ Cleaned up Docker containers and images"
