@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-Get your Job Toolkit running in 5 minutes!
+Get your Find Job running in 5 minutes!
 
 ## Prerequisites
 
@@ -61,7 +61,7 @@ job_search_prompt: |
 
 Run a one-time test:
 ```bash
-docker compose run --rm job-toolkit python job_toolkit.py
+docker compose run --rm find-job python find_job.py
 ```
 
 Check your email!

@@ -5,7 +5,7 @@ Scheduler for running job search on a configurable schedule
 import schedule
 import time
 import yaml
-from job_toolkit import JobToolkit
+from find_job import FindJob
 
 
 def load_schedule_config():
@@ -22,8 +22,8 @@ def load_schedule_config():
 def run_job_search():
     """Run the job search"""
     try:
-        toolkit = JobToolkit()
-        toolkit.run()
+        find_job = FindJob()
+        find_job.run()
     except Exception as e:
         print(f"Error running job search: {str(e)}")
 

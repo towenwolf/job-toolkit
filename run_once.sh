@@ -2,4 +2,4 @@
 # Run job search once for testing purposes
 
 echo "Running job search (one-time execution)..."
-docker compose run --rm job-toolkit python job_toolkit.py
+docker compose run --rm find-job python find_job.py
