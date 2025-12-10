@@ -95,7 +95,15 @@ class JobToolkit:
         
         # Get email configuration
         smtp_server = email_config.get('smtp_server', os.getenv('SMTP_SERVER'))
-        smtp_port = email_config.get('smtp_port', int(os.getenv('SMTP_PORT', 587)))
+        
+        # Handle SMTP port with proper validation
+        smtp_port = email_config.get('smtp_port')
+        if smtp_port is None:
+            try:
+                smtp_port = int(os.getenv('SMTP_PORT', '587'))
+            except (ValueError, TypeError):
+                smtp_port = 587
+        
         sender_email = email_config.get('sender_email', os.getenv('SENDER_EMAIL'))
         sender_password = email_config.get('sender_password', os.getenv('SENDER_PASSWORD'))
         recipient_email = email_config.get('recipient_email', os.getenv('RECIPIENT_EMAIL'))

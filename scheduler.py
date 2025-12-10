@@ -40,23 +40,29 @@ def main():
     
     print(f"Scheduling job search for {schedule_time} on: {', '.join(days)}")
     
+    # Mapping of day names to schedule methods
+    day_mapping = {
+        'monday': schedule.every().monday,
+        'tuesday': schedule.every().tuesday,
+        'wednesday': schedule.every().wednesday,
+        'thursday': schedule.every().thursday,
+        'friday': schedule.every().friday,
+        'saturday': schedule.every().saturday,
+        'sunday': schedule.every().sunday
+    }
+    
     # Schedule the job for specified days
+    valid_days = []
     for day in days:
         day_lower = day.lower()
-        if day_lower == 'monday':
-            schedule.every().monday.at(schedule_time).do(run_job_search)
-        elif day_lower == 'tuesday':
-            schedule.every().tuesday.at(schedule_time).do(run_job_search)
-        elif day_lower == 'wednesday':
-            schedule.every().wednesday.at(schedule_time).do(run_job_search)
-        elif day_lower == 'thursday':
-            schedule.every().thursday.at(schedule_time).do(run_job_search)
-        elif day_lower == 'friday':
-            schedule.every().friday.at(schedule_time).do(run_job_search)
-        elif day_lower == 'saturday':
-            schedule.every().saturday.at(schedule_time).do(run_job_search)
-        elif day_lower == 'sunday':
-            schedule.every().sunday.at(schedule_time).do(run_job_search)
+        if day_lower in day_mapping:
+            day_mapping[day_lower].at(schedule_time).do(run_job_search)
+            valid_days.append(day)
+        else:
+            print(f"Warning: Invalid day '{day}' ignored. Valid days: {', '.join(day_mapping.keys())}")
+    
+    if not valid_days:
+        raise ValueError("No valid days configured for scheduling. Please check config.yaml")
     
     print("Scheduler started. Waiting for scheduled time...")
     
