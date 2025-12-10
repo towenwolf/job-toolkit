@@ -1,0 +1,43 @@
+# Job Toolkit Configuration Example
+# Copy this file to config.yaml and update with your settings
+
+# Job search prompt - customize this to your needs
+job_search_prompt: |
+  Please search for and recommend the top 5 job opportunities for a Software Engineer with the following criteria:
+  
+  - Location: Remote or San Francisco Bay Area
+  - Experience Level: Senior (5-10 years)
+  - Tech Stack: Python, Docker, Kubernetes, AWS
+  - Industry: Technology, SaaS
+  - Company Size: Startup to mid-size (50-500 employees)
+  
+  For each job, please provide:
+  1. Company name
+  2. Job title
+  3. Location
+  4. Key requirements
+  5. Why this might be a good fit
+  
+  Please format the results in a clear, easy-to-read structure.
+
+# OpenAI configuration
+openai_model: gpt-4  # or gpt-3.5-turbo for lower cost
+max_tokens: 2000
+
+# Email configuration (can also use environment variables)
+email:
+  smtp_server: smtp.gmail.com
+  smtp_port: 587
+  sender_email: your-email@gmail.com
+  # sender_password: set via SENDER_PASSWORD environment variable
+  recipient_email: your-email@gmail.com
+
+# Schedule configuration
+schedule:
+  time: "08:00"  # 24-hour format (HH:MM)
+  days:
+    - monday
+    - tuesday
+    - wednesday
+    - thursday
+    - friday
