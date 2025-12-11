@@ -42,6 +42,13 @@ if ! command -v curl &> /dev/null; then
     exit 1
 fi
 
+# Check if python3 is available
+if ! command -v python3 &> /dev/null; then
+    echo -e "${RED}Error: python3 is not installed${NC}"
+    echo "Please install python3 to use this script"
+    exit 1
+fi
+
 # Set default model if not specified
 MODEL="${OPENAI_MODEL:-gpt-3.5-turbo}"
 echo -e "${YELLOW}Using model: ${MODEL}${NC}"
@@ -83,29 +90,37 @@ fi
 
 # Print the full JSON response
 echo -e "${GREEN}=== Full API Response ===${NC}"
-echo "$RESPONSE" | python3 -m json.tool
+if ! echo "$RESPONSE" | python3 -m json.tool; then
+    echo -e "${RED}Failed to parse JSON response${NC}"
+    echo "Raw response: $RESPONSE"
+    exit 1
+fi
 echo ""
 
 # Extract and print just the message content
 echo -e "${GREEN}=== Extracted Message Content ===${NC}"
-MESSAGE_CONTENT=$(echo "$RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['choices'][0]['message']['content'])" 2>/dev/null)
+MESSAGE_CONTENT=$(echo "$RESPONSE" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data['choices'][0]['message']['content'] if 'choices' in data and len(data['choices']) > 0 else 'No content found')" 2>&1)
 
-if [ $? -eq 0 ]; then
+if [ $? -eq 0 ] && [ "$MESSAGE_CONTENT" != "No content found" ]; then
     echo -e "${YELLOW}$MESSAGE_CONTENT${NC}"
     echo ""
     echo -e "${GREEN}✓ API test completed successfully!${NC}"
 else
-    echo -e "${RED}Failed to parse message content from response${NC}"
+    echo -e "${RED}Failed to extract message content from response${NC}"
+    echo "Error: $MESSAGE_CONTENT"
     exit 1
 fi
 
 # Print usage statistics
 echo ""
 echo -e "${GREEN}=== Usage Statistics ===${NC}"
-TOTAL_TOKENS=$(echo "$RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['usage']['total_tokens'])" 2>/dev/null)
-PROMPT_TOKENS=$(echo "$RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['usage']['prompt_tokens'])" 2>/dev/null)
-COMPLETION_TOKENS=$(echo "$RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['usage']['completion_tokens'])" 2>/dev/null)
+USAGE_DATA=$(echo "$RESPONSE" | python3 -c "import sys, json; data = json.load(sys.stdin); usage = data.get('usage', {}); print(f\"{usage.get('prompt_tokens', 'N/A')}|{usage.get('completion_tokens', 'N/A')}|{usage.get('total_tokens', 'N/A')}\")" 2>&1)
 
-echo "Prompt tokens: $PROMPT_TOKENS"
-echo "Completion tokens: $COMPLETION_TOKENS"
-echo "Total tokens: $TOTAL_TOKENS"
+if [ $? -eq 0 ]; then
+    IFS='|' read -r PROMPT_TOKENS COMPLETION_TOKENS TOTAL_TOKENS <<< "$USAGE_DATA"
+    echo "Prompt tokens: $PROMPT_TOKENS"
+    echo "Completion tokens: $COMPLETION_TOKENS"
+    echo "Total tokens: $TOTAL_TOKENS"
+else
+    echo -e "${YELLOW}Usage statistics not available in response${NC}"
+fi
