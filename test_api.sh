@@ -49,8 +49,8 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Set default model if not specified
-MODEL="${OPENAI_MODEL:-gpt-3.5-turbo}"
+# Set default model if not specified (matching the default in find_job.py)
+MODEL="${OPENAI_MODEL:-gpt-4}"
 echo -e "${YELLOW}Using model: ${MODEL}${NC}"
 echo ""
 
