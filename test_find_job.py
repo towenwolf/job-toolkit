@@ -179,18 +179,28 @@ def test_load_config():
     print("TEST: load_config - Testing Configuration Loading")
     print("="*80)
     
-    # Use the example config file for testing
-    find_job = FindJob('config.example.yaml')
+    # Set a dummy API key for config testing only
+    original_key = os.getenv('OPENAI_API_KEY')
+    if not original_key:
+        os.environ['OPENAI_API_KEY'] = 'sk-test-dummy-key-for-config-testing'
     
-    assert find_job.config is not None, "Config should be loaded"
-    assert 'job_search_prompt' in find_job.config, "Config should have job_search_prompt"
-    assert 'openai_model' in find_job.config, "Config should have openai_model"
-    assert 'email' in find_job.config, "Config should have email configuration"
-    
-    print("\n✓ Configuration loaded successfully!")
-    print(f"Model: {find_job.config['openai_model']}")
-    print(f"Max Tokens: {find_job.config.get('max_tokens', 'default')}")
-    print("\n" + "="*80)
+    try:
+        # Use the example config file for testing
+        find_job = FindJob('config.example.yaml')
+        
+        assert find_job.config is not None, "Config should be loaded"
+        assert 'job_search_prompt' in find_job.config, "Config should have job_search_prompt"
+        assert 'openai_model' in find_job.config, "Config should have openai_model"
+        assert 'email' in find_job.config, "Config should have email configuration"
+        
+        print("\n✓ Configuration loaded successfully!")
+        print(f"Model: {find_job.config['openai_model']}")
+        print(f"Max Tokens: {find_job.config.get('max_tokens', 'default')}")
+        print("\n" + "="*80)
+    finally:
+        # Clean up: restore original state
+        if not original_key:
+            del os.environ['OPENAI_API_KEY']
 
 
 if __name__ == "__main__":
