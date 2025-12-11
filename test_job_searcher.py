@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-Tests for Find Job - Automated Job Search Email System
+Tests for Job Searcher - Automated Job Search Email System
 """
 import os
 import pytest
 import json
 from datetime import datetime
-from find_job import FindJob
+from job_searcher import JobSearcher
 
 
-class TestFindJob:
-    """Test cases for FindJob class"""
+class TestJobSearcher:
+    """Test cases for JobSearcher class"""
     
     @pytest.fixture
     def config_path(self, tmp_path):
@@ -34,11 +34,11 @@ email:
         return str(config_file)
     
     @pytest.fixture
-    def find_job_instance(self, config_path):
-        """Create a FindJob instance with test config"""
-        return FindJob(config_path)
+    def job_searcher_instance(self, config_path):
+        """Create a JobSearcher instance with test config"""
+        return JobSearcher(config_path)
     
-    def test_search_jobs(self, find_job_instance):
+    def test_search_jobs(self, job_searcher_instance):
         """
         Test the search_jobs function and print the OpenAI JSON response.
         
@@ -52,19 +52,19 @@ email:
         print("="*80)
         
         # Call the search_jobs function
-        result = find_job_instance.search_jobs()
+        result = job_searcher_instance.search_jobs()
         
         # Get the actual OpenAI response for detailed output
         # NOTE: Making a second call to capture the full response object for printing.
         # This is intentional for demonstration purposes - to show the complete JSON structure.
         # In production, you would modify search_jobs() to return the response object.
-        response = find_job_instance.openai_client.chat.completions.create(
-            model=find_job_instance.config.get('openai_model', 'gpt-4'),
+        response = job_searcher_instance.openai_client.chat.completions.create(
+            model=job_searcher_instance.config.get('openai_model', 'gpt-4'),
             messages=[
                 {"role": "system", "content": "You are a helpful job search assistant. Provide job recommendations in a clear, structured format."},
-                {"role": "user", "content": find_job_instance.config.get('job_search_prompt', '')}
+                {"role": "user", "content": job_searcher_instance.config.get('job_search_prompt', '')}
             ],
-            max_tokens=find_job_instance.config.get('max_tokens', 2000),
+            max_tokens=job_searcher_instance.config.get('max_tokens', 2000),
             temperature=0.7
         )
         
@@ -121,7 +121,7 @@ email:
         
         print("\n✓ search_jobs test passed successfully!")
     
-    def test_send_email(self, find_job_instance):
+    def test_send_email(self, job_searcher_instance):
         """
         Test the send_email function by sending a plain test email.
         
@@ -144,7 +144,7 @@ email:
             <body>
                 <div class="test-box">
                     <h1>Test Email</h1>
-                    <p>This is a plain test email from the Find Job test suite.</p>
+                    <p>This is a plain test email from the Job Searcher test suite.</p>
                     <p>Timestamp: {}</p>
                     <p>If you received this email, the send_email function is working correctly!</p>
                 </div>
@@ -153,7 +153,7 @@ email:
         """.format(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         
         print("\n--- EMAIL CONFIGURATION ---")
-        email_config = find_job_instance.config.get('email', {})
+        email_config = job_searcher_instance.config.get('email', {})
         print(f"SMTP Server: {email_config.get('smtp_server', os.getenv('SMTP_SERVER', 'Not configured'))}")
         print(f"SMTP Port: {email_config.get('smtp_port', os.getenv('SMTP_PORT', 'Not configured'))}")
         print(f"Sender Email: {email_config.get('sender_email', os.getenv('SENDER_EMAIL', 'Not configured'))}")
@@ -161,7 +161,7 @@ email:
         
         print("\n--- SENDING EMAIL ---")
         try:
-            find_job_instance.send_email(test_email_content)
+            job_searcher_instance.send_email(test_email_content)
             print("\n✓ Email sent successfully!")
             print("Check the recipient inbox to verify the test email was delivered.")
         except ValueError as e:
@@ -187,16 +187,16 @@ def test_load_config(monkeypatch):
         monkeypatch.setenv('OPENAI_API_KEY', 'sk-test-dummy-key-for-config-testing')
     
     # Use the example config file for testing
-    find_job = FindJob('config.example.yaml')
+    job_searcher = JobSearcher('config.example.yaml')
     
-    assert find_job.config is not None, "Config should be loaded"
-    assert 'job_search_prompt' in find_job.config, "Config should have job_search_prompt"
-    assert 'openai_model' in find_job.config, "Config should have openai_model"
-    assert 'email' in find_job.config, "Config should have email configuration"
+    assert job_searcher.config is not None, "Config should be loaded"
+    assert 'job_search_prompt' in job_searcher.config, "Config should have job_search_prompt"
+    assert 'openai_model' in job_searcher.config, "Config should have openai_model"
+    assert 'email' in job_searcher.config, "Config should have email configuration"
     
     print("\n✓ Configuration loaded successfully!")
-    print(f"Model: {find_job.config['openai_model']}")
-    print(f"Max Tokens: {find_job.config.get('max_tokens', 'default')}")
+    print(f"Model: {job_searcher.config['openai_model']}")
+    print(f"Max Tokens: {job_searcher.config.get('max_tokens', 'default')}")
     print("\n" + "="*80)
 
 

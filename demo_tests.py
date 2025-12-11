@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Demo script showing what the test_find_job.py tests do without requiring API credentials.
+Demo script showing what the test_job_searcher.py tests do without requiring API credentials.
 This is for demonstration purposes only.
 """
 
@@ -9,7 +9,7 @@ def demo_search_jobs_test():
     Demonstrates what the test_search_jobs test does.
     
     The actual test:
-    1. Initializes FindJob with test configuration
+    1. Initializes JobSearcher with test configuration
     2. Calls search_jobs() to query OpenAI API
     3. Makes another call to get the full response object
     4. Prints comprehensive details about the response
@@ -19,7 +19,7 @@ def demo_search_jobs_test():
     print("="*80)
     print("\nWhat this test does:")
     print("1. Loads configuration from test_config.yaml")
-    print("2. Calls find_job_instance.search_jobs()")
+    print("2. Calls job_searcher_instance.search_jobs()")
     print("3. Captures the full OpenAI API response object")
     print("4. Prints detailed information including:")
     print("")
@@ -103,7 +103,7 @@ def demo_send_email_test():
     print("\nWhat this test does:")
     print("1. Creates a plain HTML test email with timestamp")
     print("2. Displays the SMTP configuration being used")
-    print("3. Calls find_job_instance.send_email(test_content)")
+    print("3. Calls job_searcher_instance.send_email(test_content)")
     print("4. Sends an actual email to the configured recipient")
     print("")
     
@@ -126,7 +126,7 @@ def demo_send_email_test():
             <body>
                 <div class="test-box">
                     <h1>Test Email</h1>
-                    <p>This is a plain test email from the Find Job test suite.</p>
+                    <p>This is a plain test email from the Job Searcher test suite.</p>
                     <p>Timestamp: 2024-12-11 23:20:00</p>
                     <p>If you received this email, the send_email function is working correctly!</p>
                 </div>
@@ -180,11 +180,11 @@ def main():
     """Run all demos"""
     print("\n")
     print("="*80)
-    print("TEST DEMONSTRATION - Find Job Test Suite")
+    print("TEST DEMONSTRATION - Job Searcher Test Suite")
     print("="*80)
     print("\nThis script demonstrates what the actual tests do.")
-    print("The real tests are in test_find_job.py and can be run with:")
-    print("  pytest test_find_job.py -v -s")
+    print("The real tests are in test_job_searcher.py and can be run with:")
+    print("  pytest test_job_searcher.py -v -s")
     print("")
     print("Note: Real tests require:")
     print("  - OPENAI_API_KEY environment variable (for search_jobs test)")
@@ -205,21 +205,21 @@ def main():
     print("   - Validates required fields exist")
     print("   - ✓ Can run without API credentials")
     print("")
-    print("2. test_search_jobs (in TestFindJob class)")
+    print("2. test_search_jobs (in TestJobSearcher class)")
     print("   - Tests OpenAI API integration")
     print("   - Calls search_jobs() function")
     print("   - Prints FULL JSON response from OpenAI")
     print("   - Shows response ID, model, tokens, content")
     print("   - ⚠ Requires OPENAI_API_KEY")
     print("")
-    print("3. test_send_email (in TestFindJob class)")
+    print("3. test_send_email (in TestJobSearcher class)")
     print("   - Tests email sending functionality")
     print("   - Sends a plain test email")
     print("   - Prints email configuration")
     print("   - ⚠ Requires SMTP credentials in .env")
     print("")
     print("To run the actual tests:")
-    print("  pytest test_find_job.py -v -s")
+    print("  pytest test_job_searcher.py -v -s")
     print("")
     print("See TEST_README.md for detailed instructions")
     print("="*80)

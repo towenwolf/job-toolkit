@@ -8,7 +8,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
-COPY find_job.py .
+COPY job_searcher.py .
 COPY scheduler.py .
 
 # Copy config if exists (will be mounted as volume in production)
