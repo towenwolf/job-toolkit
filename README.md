@@ -180,6 +180,23 @@ docker-compose down
 docker-compose run --rm find-job python find_job.py
 ```
 
+### Test OpenAI API Connection
+
+Before running the full job search, you can test your OpenAI API connection:
+
+```bash
+# Test the API with a simple request
+./test_api.sh
+```
+
+This script will:
+- Verify your OPENAI_API_KEY is configured
+- Send a test request to the OpenAI API
+- Print the full API response
+- Display usage statistics (token counts)
+
+Make sure your `.env` file contains a valid `OPENAI_API_KEY` before running this test.
+
 ### Local Development
 
 ```bash
@@ -199,6 +216,7 @@ python scheduler.py
 find-job/
 ├── find_job.py             # Core job search and email logic
 ├── scheduler.py            # Scheduling system
+├── test_api.sh             # OpenAI API test script
 ├── requirements.txt        # Python dependencies
 ├── config.example.yaml     # Example configuration
 ├── .env.example           # Example environment variables
