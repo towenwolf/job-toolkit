@@ -50,7 +50,7 @@ if ! command -v python3 &> /dev/null; then
 fi
 
 # Set default model if not specified (matching the default in find_job.py)
-MODEL="${OPENAI_MODEL:-gpt-4}"
+MODEL="${OPENAI_MODEL:-gpt-5.1}"
 echo -e "${YELLOW}Using model: ${MODEL}${NC}"
 echo ""
 
@@ -77,7 +77,7 @@ RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions \
         \"content\": \"$TEST_PROMPT\"
       }
     ],
-    \"max_tokens\": 150,
+    \"max_completion_tokens\": 150,
     \"temperature\": 0.7
   }")
 
