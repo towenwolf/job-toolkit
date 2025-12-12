@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-Get your Find Job running in 5 minutes!
+Get your Job Searcher running in 5 minutes!
 
 ## Prerequisites
 
@@ -61,7 +61,7 @@ job_search_prompt: |
 
 Run a one-time test:
 ```bash
-docker compose run --rm find-job python find_job.py
+docker compose run --rm job-searcher python job_searcher.py
 ```
 
 Check your email!

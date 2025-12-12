@@ -1,7 +1,7 @@
 services:
-  find-job:
+  job-searcher:
     build: .
-    container_name: find-job
+    container_name: job-searcher
     restart: unless-stopped
     volumes:
       # Mount your config file
@@ -22,4 +22,4 @@ services:
       # Timezone (optional, defaults to UTC)
       - TZ=${TZ:-UTC}
     # Uncomment to run in one-shot mode instead of scheduler
-    # command: python find_job.py
+    # command: python job_searcher.py

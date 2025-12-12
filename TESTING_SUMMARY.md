@@ -2,15 +2,15 @@
 
 ## Overview
 
-This document summarizes the test implementation for the Find Job application as requested in the issue.
+This document summarizes the test implementation for the Job Searcher application as requested in the issue.
 
 ## What Was Implemented
 
 ### 1. Test for `search_jobs` Function
-**File:** `test_find_job.py::TestFindJob::test_search_jobs`
+**File:** `test_job_searcher.py::TestJobSearcher::test_search_jobs`
 
 This test:
-- Calls the `search_jobs()` function in `find_job.py`
+- Calls the `search_jobs()` function in `job_searcher.py`
 - Makes an actual OpenAI API call with the configured prompt
 - **Prints the complete OpenAI JSON response** including:
   - Response ID and metadata
@@ -40,7 +40,7 @@ MESSAGE CONTENT
 ```
 
 ### 2. Test for Email Sending
-**File:** `test_find_job.py::TestFindJob::test_send_email`
+**File:** `test_job_searcher.py::TestJobSearcher::test_send_email`
 
 This test:
 - Creates a plain HTML test email with a timestamp
@@ -57,7 +57,7 @@ This test:
 - Confirmation message
 
 ### 3. Configuration Loading Test
-**File:** `test_find_job.py::test_load_config`
+**File:** `test_job_searcher.py::test_load_config`
 
 This test:
 - Validates that configuration files can be loaded
@@ -67,7 +67,7 @@ This test:
 ## Files Created/Modified
 
 ### New Files:
-1. **test_find_job.py** (208 lines)
+1. **test_job_searcher.py** (208 lines)
    - Main test file with all test cases
    - Uses pytest framework
    - Includes detailed print statements for debugging
@@ -106,10 +106,10 @@ make setup  # or manually copy .env.example and config.example.yaml
 # - SMTP credentials (required for send_email test)
 
 # Run all tests
-pytest test_find_job.py -v -s
+pytest test_job_searcher.py -v -s
 
 # Run specific test
-pytest test_find_job.py::TestFindJob::test_search_jobs -v -s
+pytest test_job_searcher.py::TestJobSearcher::test_search_jobs -v -s
 ```
 
 ### See What Tests Do (No Credentials Needed):
@@ -147,27 +147,27 @@ python demo_tests.py
 
 ## Example Test Output
 
-When running `pytest test_find_job.py -v -s`:
+When running `pytest test_job_searcher.py -v -s`:
 
 ```
-test_find_job.py::test_load_config PASSED
+test_job_searcher.py::test_load_config PASSED
   ✓ Configuration loaded successfully!
 
-test_find_job.py::TestFindJob::test_search_jobs PASSED
+test_job_searcher.py::TestJobSearcher::test_search_jobs PASSED
   ✓ search_jobs test passed successfully!
   (includes full JSON response printed to console)
 
-test_find_job.py::TestFindJob::test_send_email PASSED
+test_job_searcher.py::TestJobSearcher::test_send_email PASSED
   ✓ Email sent successfully!
   Check the recipient inbox to verify the test email was delivered.
 ```
 
 ## References
 
-- Main test file: `test_find_job.py`
+- Main test file: `test_job_searcher.py`
 - Documentation: `TEST_README.md`
 - Demo: `demo_tests.py`
-- Application: `find_job.py`
+- Application: `job_searcher.py`
 
 ---
 

@@ -1,6 +1,6 @@
-# Testing Guide for Find Job
+# Testing Guide for Job Searcher
 
-This document describes how to run the tests for the Find Job application.
+This document describes how to run the tests for the Job Searcher application.
 
 ## Test Overview
 
@@ -47,7 +47,7 @@ You can customize the job search prompt in `config.yaml` if desired.
 ### Run All Tests
 
 ```bash
-pytest test_find_job.py -v -s
+pytest test_job_searcher.py -v -s
 ```
 
 The `-v` flag provides verbose output, and `-s` allows print statements to be displayed.
@@ -57,7 +57,7 @@ The `-v` flag provides verbose output, and `-s` allows print statements to be di
 #### Test OpenAI API Integration (search_jobs):
 
 ```bash
-pytest test_find_job.py::TestFindJob::test_search_jobs -v -s
+pytest test_job_searcher.py::TestJobSearcher::test_search_jobs -v -s
 ```
 
 This test will:
@@ -72,7 +72,7 @@ This test will:
 #### Test Email Sending:
 
 ```bash
-pytest test_find_job.py::TestFindJob::test_send_email -v -s
+pytest test_job_searcher.py::TestJobSearcher::test_send_email -v -s
 ```
 
 This test will:
@@ -85,7 +85,7 @@ This test will:
 #### Test Configuration Loading:
 
 ```bash
-pytest test_find_job.py::test_load_config -v -s
+pytest test_job_searcher.py::test_load_config -v -s
 ```
 
 This test validates that the configuration file can be loaded and contains required fields.
@@ -152,7 +152,7 @@ If using Gmail, you need to:
 You can also run tests in the Docker environment:
 
 ```bash
-docker compose run --rm find-job pytest test_find_job.py -v -s
+docker compose run --rm job-searcher pytest test_job_searcher.py -v -s
 ```
 
 ## Notes
