@@ -81,7 +81,7 @@
 config.yaml
 ├── job_search_prompt    # Custom prompt for ChatGPT
 ├── openai_model         # Model selection (gpt-4, gpt-3.5-turbo)
-├── max_tokens           # Response length limit
+├── max_completion_tokens # Response length limit
 ├── email                # Optional email settings
 │   ├── smtp_server
 │   ├── smtp_port

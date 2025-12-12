@@ -252,7 +252,7 @@ job-searcher/
 Edit `config.yaml`:
 ```yaml
 openai_model: gpt-3.5-turbo  # Cheaper alternative to gpt-4
-max_tokens: 2000
+max_completion_tokens: 2000
 ```
 
 ### Custom Email Template
