@@ -45,7 +45,7 @@ class JobSearcher:
                     {"role": "system", "content": "You are a helpful job search assistant. Provide job recommendations in a clear, structured format."},
                     {"role": "user", "content": prompt}
                 ],
-                max_tokens=self.config.get('max_tokens', 2000),
+                max_completion_tokens=self.config.get('max_completion_tokens', 2000),
                 temperature=0.7
             )
             

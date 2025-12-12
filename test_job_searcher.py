@@ -23,7 +23,7 @@ job_search_prompt: |
   Keep the response short and simple.
 
 openai_model: gpt-4
-max_tokens: 500
+max_completion_tokens: 500
 
 email:
   smtp_server: smtp.gmail.com
@@ -68,7 +68,7 @@ email:
                 {"role": "system", "content": "You are a helpful job search assistant. Provide job recommendations in a clear, structured format."},
                 {"role": "user", "content": job_searcher_instance.config.get('job_search_prompt', '')}
             ],
-            max_tokens=job_searcher_instance.config.get('max_tokens', 2000),
+            max_completion_tokens=job_searcher_instance.config.get('max_completion_tokens', 2000),
             temperature=0.7
         )
         
@@ -216,7 +216,7 @@ def test_load_config(monkeypatch):
     
     print("\n✓ Configuration loaded successfully!")
     print(f"Model: {job_searcher.config['openai_model']}")
-    print(f"Max Tokens: {job_searcher.config.get('max_tokens', 'default')}")
+    print(f"Max Completion Tokens: {job_searcher.config.get('max_completion_tokens', 'default')}")
     print("\n" + "="*80)
 
 
