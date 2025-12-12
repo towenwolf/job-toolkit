@@ -6,18 +6,14 @@ services:
     volumes:
       # Mount your config file
       - ./config.yaml:/app/config.yaml:ro
-      # Optional: mount .env file if you prefer environment variables
-      # - ./.env:/app/.env:ro
+      # Mount .env file for environment variables
+      - ./.env:/app/.env:ro
     environment:
       # OpenAI API Key (required)
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       
-      # Email configuration (alternative to config.yaml)
-      - SMTP_SERVER=${SMTP_SERVER:-smtp.gmail.com}
-      - SMTP_PORT=${SMTP_PORT:-587}
-      - SENDER_EMAIL=${SENDER_EMAIL}
-      - SENDER_PASSWORD=${SENDER_PASSWORD}
-      - RECIPIENT_EMAIL=${RECIPIENT_EMAIL}
+      # Email password (other email settings in config.yaml)
+      - APP_PASSWORD=${APP_PASSWORD}
       
       # Timezone (optional, defaults to UTC)
       - TZ=${TZ:-UTC}

@@ -4,6 +4,7 @@ Job Searcher - Automated Job Search Email System
 """
 import os
 import yaml
+import json
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -32,53 +33,118 @@ class JobSearcher:
             raise Exception(f"Configuration file not found: {config_path}")
     
     def search_jobs(self):
-        """Use ChatGPT to search for jobs based on configured criteria"""
+        """Use ChatGPT with web search to find real-time job opportunities"""
         prompt = self.config.get('job_search_prompt', '')
         
         if not prompt:
             raise ValueError("No job search prompt configured")
         
+        # Add JSON formatting instruction to the prompt
+        json_instruction = "\n\nPlease format your response as a valid JSON object with the following structure:\n{\n  \"jobs\": [\n    {\n      \"company\": \"Company Name\",\n      \"title\": \"Job Title\",\n      \"location\": \"Location\",\n      \"requirements\": [\"requirement 1\", \"requirement 2\"],\n      \"why_good_fit\": \"Explanation\",\n      \"url\": \"Job posting URL if available\"\n    }\n  ]\n}"
+        
+        full_prompt = prompt + json_instruction
+        
         try:
-            response = self.openai_client.chat.completions.create(
+            # Use Responses API with web_search tool for real-time job search
+            response = self.openai_client.responses.create(
                 model=self.config.get('openai_model', 'gpt-4'),
-                messages=[
-                    {"role": "system", "content": "You are a helpful job search assistant. Provide job recommendations in a clear, structured format."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_completion_tokens=self.config.get('max_completion_tokens', 2000),
-                temperature=0.7
+                tools=[{"type": "web_search"}],
+                input=full_prompt
             )
             
-            return response.choices[0].message.content
+            # Try to parse as JSON, return raw text if parsing fails
+            try:
+                result_text = response.output_text
+                # Try to find JSON in the response
+                if '{' in result_text and '}' in result_text:
+                    start = result_text.find('{')
+                    end = result_text.rfind('}') + 1
+                    json_str = result_text[start:end]
+                    json.loads(json_str)  # Validate it's valid JSON
+                    return json_str
+                else:
+                    return result_text
+            except json.JSONDecodeError:
+                # If JSON parsing fails, return the raw text
+                return response.output_text
         except Exception as e:
             raise Exception(f"Error calling OpenAI API: {str(e)}")
     
     def format_email(self, job_results):
-        """Format job results into an HTML email"""
+        """Format job results into an HTML email
+        
+        Args:
+            job_results: Either a JSON string or plain text string with job results
+        
+        Returns:
+            Formatted HTML email string
+        """
         today = datetime.now().strftime("%Y-%m-%d")
+        
+        # Try to parse as JSON and format nicely
+        content_html = ""
+        try:
+            # Try to parse the job_results as JSON
+            if isinstance(job_results, str):
+                job_data = json.loads(job_results)
+            else:
+                job_data = job_results
+            
+            # Check if it's in the expected format
+            if isinstance(job_data, dict) and 'jobs' in job_data:
+                jobs = job_data['jobs']
+                content_html = f"<h2 style='color: #2c3e50; margin-top: 0;'>Found {len(jobs)} Job Opportunities</h2>"
+                
+                for i, job in enumerate(jobs, 1):
+                    company = job.get('company', 'N/A')
+                    title = job.get('title', 'N/A')
+                    location = job.get('location', 'N/A')
+                    requirements = job.get('requirements', [])
+                    why_fit = job.get('why_good_fit', 'N/A')
+                    url = job.get('url', '')
+                    
+                    content_html += f"""
+                    <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 5px; background-color: #f8f9fa;">
+                        <h3 style="color: #3498db; margin-top: 0;">#{i}: {title}</h3>
+                        <p style="margin: 10px 0;"><strong>🏢 Company:</strong> {company}</p>
+                        <p style="margin: 10px 0;"><strong>📍 Location:</strong> {location}</p>
+                        <div style="margin: 10px 0;">
+                            <strong>📋 Requirements:</strong>
+                            <ul style="margin: 5px 0;">
+                                {''.join([f'<li>{req}</li>' for req in requirements])}
+                            </ul>
+                        </div>
+                        <p style="margin: 10px 0;"><strong>✨ Why Good Fit:</strong> {why_fit}</p>
+                        {f'<p style="margin: 10px 0;"><strong>🔗 Apply:</strong> <a href="{url}" style="color: #3498db;">{url}</a></p>' if url else ''}
+                    </div>
+                    """
+            else:
+                # Not in expected format, treat as plain text
+                content_html = f'<div style="white-space: pre-wrap; background-color: #f8f9fa; padding: 20px; border-radius: 5px;">{job_results}</div>'
+        except (json.JSONDecodeError, TypeError):
+            # Not JSON, treat as plain text
+            content_html = f'<div style="white-space: pre-wrap; background-color: #f8f9fa; padding: 20px; border-radius: 5px;">{job_results}</div>'
         
         html = f"""
         <html>
             <head>
                 <style>
-                    body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-                    h1 {{ color: #2c3e50; }}
+                    body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; }}
+                    h1 {{ color: #2c3e50; margin: 0; }}
                     h2 {{ color: #34495e; margin-top: 20px; }}
-                    .header {{ background-color: #3498db; color: white; padding: 20px; }}
-                    .content {{ padding: 20px; }}
-                    .footer {{ background-color: #ecf0f1; padding: 10px; text-align: center; font-size: 12px; color: #7f8c8d; }}
-                    .job-content {{ white-space: pre-wrap; }}
+                    h3 {{ color: #3498db; margin-top: 0; }}
+                    .header {{ background-color: #3498db; color: white; padding: 20px; border-radius: 5px 5px 0 0; }}
+                    .content {{ padding: 20px; background-color: white; }}
+                    .footer {{ background-color: #ecf0f1; padding: 15px; text-align: center; font-size: 12px; color: #7f8c8d; border-radius: 0 0 5px 5px; }}
                 </style>
             </head>
             <body>
                 <div class="header">
                     <h1>Your Daily Job Recommendations</h1>
-                    <p>Date: {today}</p>
+                    <p style="margin: 5px 0; opacity: 0.9;">Date: {today}</p>
                 </div>
                 <div class="content">
-                    <div class="job-content">
-{job_results}
-                    </div>
+{content_html}
                 </div>
                 <div class="footer">
                     <p>This email was automatically generated by Job Searcher</p>
@@ -105,8 +171,16 @@ class JobSearcher:
                 smtp_port = 587
         
         sender_email = email_config.get('sender_email', os.getenv('SENDER_EMAIL'))
-        sender_password = email_config.get('sender_password', os.getenv('SENDER_PASSWORD'))
+        sender_password = email_config.get('sender_password', os.getenv('APP_PASSWORD'))
         recipient_email = email_config.get('recipient_email', os.getenv('RECIPIENT_EMAIL'))
+        
+        # Strip whitespace from credentials (handles newlines and spaces)
+        if sender_email:
+            sender_email = sender_email.strip()
+        if sender_password:
+            sender_password = sender_password.strip()
+        if recipient_email:
+            recipient_email = recipient_email.strip()
         
         if not all([smtp_server, sender_email, sender_password, recipient_email]):
             raise ValueError("Missing email configuration. Please check config.yaml or environment variables.")

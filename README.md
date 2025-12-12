@@ -79,9 +79,7 @@ make start
    Edit `.env` with your credentials:
    ```bash
    OPENAI_API_KEY=your-openai-api-key
-   SENDER_EMAIL=your-email@gmail.com
-   SENDER_PASSWORD=your-app-password
-   RECIPIENT_EMAIL=your-email@gmail.com
+   APP_PASSWORD=your-app-password
    ```
 
 4. **Run with Docker Compose**
@@ -142,13 +140,9 @@ email:
   recipient_email: your-email@gmail.com
 ```
 
-**Option 2: Environment Variables** (in `.env`)
+**Option 2: Environment Variables** (in `.env` - only for password)
 ```bash
-SMTP_SERVER=smtp.gmail.com
-SMTP_PORT=587
-SENDER_EMAIL=your-email@gmail.com
-SENDER_PASSWORD=your-app-password
-RECIPIENT_EMAIL=your-email@gmail.com
+APP_PASSWORD=your-app-password
 ```
 
 #### Gmail Setup
@@ -156,7 +150,7 @@ RECIPIENT_EMAIL=your-email@gmail.com
 To use Gmail:
 1. Enable 2-factor authentication on your Google account
 2. Generate an app password at https://myaccount.google.com/apppasswords
-3. Use the app password in `SENDER_PASSWORD`
+3. Use the app password in `APP_PASSWORD` in your `.env` file
 
 ## Usage
 
