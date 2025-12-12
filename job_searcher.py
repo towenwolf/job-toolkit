@@ -32,24 +32,21 @@ class JobSearcher:
             raise Exception(f"Configuration file not found: {config_path}")
     
     def search_jobs(self):
-        """Use ChatGPT to search for jobs based on configured criteria"""
+        """Use ChatGPT with web search to find real-time job opportunities"""
         prompt = self.config.get('job_search_prompt', '')
         
         if not prompt:
             raise ValueError("No job search prompt configured")
         
         try:
-            response = self.openai_client.chat.completions.create(
+            # Use Responses API with web_search tool for real-time job search
+            response = self.openai_client.responses.create(
                 model=self.config.get('openai_model', 'gpt-4'),
-                messages=[
-                    {"role": "system", "content": "You are a helpful job search assistant. Provide job recommendations in a clear, structured format."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_completion_tokens=self.config.get('max_completion_tokens', 2000),
-                temperature=0.7
+                tools=[{"type": "web_search"}],
+                input=prompt
             )
             
-            return response.choices[0].message.content
+            return response.output_text
         except Exception as e:
             raise Exception(f"Error calling OpenAI API: {str(e)}")
     
