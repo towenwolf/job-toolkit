@@ -1,111 +1,72 @@
 #!/usr/bin/env python3
 """
-Simple script to test the send_email function in job_searcher.py
-Uses email configuration from .env file
+Test script for format_email and send_email functions from JobSearcher
+Loads prompt_results.json, formats it to human-readable HTML, and sends email
 """
+import json
 import os
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from datetime import datetime
-from dotenv import load_dotenv
+from job_searcher import JobSearcher
 
-# Load environment variables from .env
-load_dotenv()
 
 def main():
     print("="*80)
-    print("Testing send_email functionality")
+    print("Testing format_email and send_email from JobSearcher")
     print("="*80)
     
-    # Get email configuration from .env
-    smtp_server = os.getenv('SMTP_SERVER')
-    smtp_port = int(os.getenv('SMTP_PORT', '587'))
-    sender_email = os.getenv('SENDER_EMAIL')
-    sender_password = os.getenv('APP_PASSWORD')
-    recipient_email = os.getenv('RECIPIENT_EMAIL')
-    
-    # Display email configuration
-    print("\nEmail Configuration from .env:")
-    print(f"  SMTP Server: {smtp_server}")
-    print(f"  SMTP Port: {smtp_port}")
-    print(f"  From: {sender_email}")
-    print(f"  To: {recipient_email}")
-    
-    # Validate configuration
-    if not all([smtp_server, sender_email, sender_password, recipient_email]):
-        print("\n✗ ERROR: Missing email configuration in .env file")
-        print("Required variables: SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, APP_PASSWORD, RECIPIENT_EMAIL")
+    # Check if prompt_results.json exists
+    if not os.path.exists('prompt_results.json'):
+        print("\n✗ ERROR: prompt_results.json not found")
+        print("Please run test_prompt.py first to generate prompt_results.json")
         return 1
     
-    # Create test email content
-    test_html_content = f"""
-    <html>
-        <head>
-            <style>
-                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-                .test-box {{ 
-                    border: 3px solid #3498db; 
-                    padding: 30px; 
-                    margin: 20px; 
-                    background-color: #ecf0f1;
-                    border-radius: 8px;
-                    max-width: 600px;
-                }}
-                h1 {{ color: #2c3e50; }}
-                .success {{ color: #27ae60; font-weight: bold; }}
-                .info {{ color: #7f8c8d; font-size: 14px; margin-top: 20px; }}
-            </style>
-        </head>
-        <body>
-            <div class="test-box">
-                <h1>✓ Job Searcher Email Test</h1>
-                <p class="success">SUCCESS! The send_email() function is working correctly.</p>
-                <p>This test email was sent using the <code>send_email()</code> method from <code>job_searcher.py</code>.</p>
-                <p>If you're reading this, it means:</p>
-                <ul>
-                    <li>✓ Email configuration is correct</li>
-                    <li>✓ SMTP authentication succeeded</li>
-                    <li>✓ Email was sent and received successfully</li>
-                </ul>
-                <div class="info">
-                    <p>Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-                    <p>Method: JobSearcher.send_email()</p>
-                </div>
-            </div>
-        </body>
-    </html>
-    """
-    
-    # Create email message
-    message = MIMEMultipart('alternative')
-    message['Subject'] = f"Job Searcher Email Test - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-    message['From'] = sender_email
-    message['To'] = recipient_email
-    
-    # Attach HTML content
-    html_part = MIMEText(test_html_content, 'html')
-    message.attach(html_part)
-    
-    # Send the test email
-    print("\n" + "="*80)
-    print("Sending test email using SMTP from .env...")
-    print("="*80)
-    
+    # Load prompt_results.json
+    print("\n1. Loading prompt_results.json...")
     try:
-        with smtplib.SMTP(smtp_server, smtp_port) as server:
-            server.starttls()
-            server.login(sender_email, sender_password)
-            server.send_message(message)
-        
-        print(f"\n✓ SUCCESS! Email sent successfully to {recipient_email}")
-        print("Check your inbox at the recipient email address.")
+        with open('prompt_results.json', 'r') as f:
+            results_data = json.load(f)
+        print("   ✓ Successfully loaded prompt_results.json")
     except Exception as e:
-        print(f"\n✗ ERROR: Failed to send email")
-        print(f"Error details: {e}")
+        print(f"   ✗ ERROR: Failed to load prompt_results.json: {e}")
+        return 1
+    
+    # Initialize JobSearcher
+    print("\n2. Initializing JobSearcher...")
+    try:
+        job_searcher = JobSearcher()
+        print("   ✓ JobSearcher initialized")
+    except Exception as e:
+        print(f"   ✗ ERROR: Failed to initialize JobSearcher: {e}")
+        return 1
+    
+    # Get job_results from the data (can be JSON or string)
+    job_results = results_data.get('job_results')
+    if not job_results:
+        print("\n✗ ERROR: No job_results found in prompt_results.json")
+        return 1
+    
+    # Format the results using JobSearcher.format_email()
+    print("\n3. Formatting job results using format_email()...")
+    try:
+        formatted_email = job_searcher.format_email(job_results)
+        print("   ✓ Email formatted successfully")
+    except Exception as e:
+        print(f"   ✗ ERROR: Failed to format email: {e}")
+        return 1
+    
+    # Send the email
+    print("\n4. Sending email...")
+    print("="*80)
+    try:
+        job_searcher.send_email(formatted_email)
+        print("\n✓ SUCCESS! Email sent successfully")
+        print("\nCheck your inbox for the formatted job results!")
+    except Exception as e:
+        print(f"\n✗ ERROR: Failed to send email: {e}")
         return 1
     
     print("\n" + "="*80)
+    print("Email Test Complete!")
+    print("="*80)
     return 0
 
 if __name__ == "__main__":
