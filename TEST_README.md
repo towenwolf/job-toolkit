@@ -76,11 +76,11 @@ pytest test_job_searcher.py::TestJobSearcher::test_send_email -v -s
 ```
 
 This test will:
-- Send a plain test email to the configured recipient
+- Test the email sending functionality with mocked SMTP connection
 - Print the email configuration being used
-- Confirm successful delivery (check your inbox!)
+- Verify that SMTP methods are called correctly (connection, starttls, login, send_message)
 
-**Note:** This test will be skipped if SMTP credentials are not configured.
+**Note:** This test uses mocking and does NOT require real SMTP credentials or send actual emails.
 
 #### Test Configuration Loading:
 
@@ -119,33 +119,23 @@ EMAIL CONFIGURATION
 - SMTP Server and Port
 - Sender and Recipient addresses
 
-Email sending status and confirmation
+SMTP method verification status:
+- SMTP connection established
+- STARTTLS called
+- Login called with correct credentials
+- Message sent
 ```
 
 ## Troubleshooting
 
 ### Missing API Key Error
 
-If you see: `Error: Missing email configuration` or OpenAI API errors, ensure:
+If you see OpenAI API errors in `test_search_jobs`, ensure:
 1. You've created the `.env` file
 2. You've added your `OPENAI_API_KEY` to `.env`
-3. You've added SMTP credentials to `.env`
 
-### Email Test Skipped
-
-If the email test is skipped, it means SMTP configuration is missing. Add the required environment variables to `.env`:
-- `SMTP_SERVER`
-- `SMTP_PORT`
-- `SENDER_EMAIL`
-- `SENDER_PASSWORD`
-- `RECIPIENT_EMAIL`
-
-### Gmail Users
-
-If using Gmail, you need to:
-1. Enable 2-factor authentication on your Google account
-2. Generate an "App Password" (not your regular password)
-3. Use the App Password for `SENDER_PASSWORD` in `.env`
+**Note:** The `test_send_email` test uses mocking and does not require SMTP credentials.
+The `test_load_config` test does not require any credentials.
 
 ## Running Tests in Docker
 
@@ -158,6 +148,6 @@ docker compose run --rm job-searcher pytest test_job_searcher.py -v -s
 ## Notes
 
 - The `search_jobs` test makes actual API calls and will consume OpenAI API credits
-- The `send_email` test will send actual emails to the configured recipient
+- The `send_email` test uses mocking and does NOT send actual emails or require SMTP credentials
 - Tests are designed to be informative with detailed output for debugging
 - The config loading test uses `config.example.yaml` and doesn't require credentials
