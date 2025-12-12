@@ -6,8 +6,8 @@ services:
     volumes:
       # Mount your config file
       - ./config.yaml:/app/config.yaml:ro
-      # Optional: mount .env file if you prefer environment variables
-      # - ./.env:/app/.env:ro
+      # Mount .env file for environment variables
+      - ./.env:/app/.env:ro
     environment:
       # OpenAI API Key (required)
       - OPENAI_API_KEY=${OPENAI_API_KEY}

@@ -108,6 +108,14 @@ class JobSearcher:
         sender_password = email_config.get('sender_password', os.getenv('SENDER_PASSWORD'))
         recipient_email = email_config.get('recipient_email', os.getenv('RECIPIENT_EMAIL'))
         
+        # Strip whitespace from credentials (handles newlines and spaces)
+        if sender_email:
+            sender_email = sender_email.strip()
+        if sender_password:
+            sender_password = sender_password.strip()
+        if recipient_email:
+            recipient_email = recipient_email.strip()
+        
         if not all([smtp_server, sender_email, sender_password, recipient_email]):
             raise ValueError("Missing email configuration. Please check config.yaml or environment variables.")
         
