@@ -19,7 +19,7 @@
 │  └─────────────────────────────────────────────────────┘  │
 │                        ↓                                   │
 │  ┌─────────────────────────────────────────────────────┐  │
-│  │              find_job.py                            │  │
+│  │              job_searcher.py                        │  │
 │  │                                                     │  │
 │  │  1. Search Jobs                                     │  │
 │  │     ┌────────────────────────────┐                 │  │
@@ -58,7 +58,7 @@
 
 2. **Scheduled Execution**
    - Runs at configured time (e.g., 8:00 AM daily)
-   - Triggers `find_job.run()`
+   - Triggers `job_searcher.run()`
 
 3. **Job Search**
    - Reads custom prompt from `config.yaml`
@@ -114,7 +114,7 @@ docker compose up -d
 
 ### One-Shot Mode (Testing)
 ```bash
-docker compose run --rm find-job python find_job.py
+docker compose run --rm job-searcher python job_searcher.py
 ```
 - Runs once
 - Immediate execution
@@ -159,7 +159,7 @@ docker compose run --rm find-job python find_job.py
    - Change time or days
 
 3. **Email Template**
-   - Modify `find_job.py` → `format_email()`
+   - Modify `job_searcher.py` → `format_email()`
    - Customize HTML/CSS
 
 4. **AI Model**
