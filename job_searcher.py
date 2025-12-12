@@ -4,6 +4,7 @@ Job Searcher - Automated Job Search Email System
 """
 import os
 import yaml
+import json
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -38,15 +39,34 @@ class JobSearcher:
         if not prompt:
             raise ValueError("No job search prompt configured")
         
+        # Add JSON formatting instruction to the prompt
+        json_instruction = "\n\nPlease format your response as a valid JSON object with the following structure:\n{\n  \"jobs\": [\n    {\n      \"company\": \"Company Name\",\n      \"title\": \"Job Title\",\n      \"location\": \"Location\",\n      \"requirements\": [\"requirement 1\", \"requirement 2\"],\n      \"why_good_fit\": \"Explanation\",\n      \"url\": \"Job posting URL if available\"\n    }\n  ]\n}"
+        
+        full_prompt = prompt + json_instruction
+        
         try:
             # Use Responses API with web_search tool for real-time job search
             response = self.openai_client.responses.create(
                 model=self.config.get('openai_model', 'gpt-4'),
                 tools=[{"type": "web_search"}],
-                input=prompt
+                input=full_prompt
             )
             
-            return response.output_text
+            # Try to parse as JSON, return raw text if parsing fails
+            try:
+                result_text = response.output_text
+                # Try to find JSON in the response
+                if '{' in result_text and '}' in result_text:
+                    start = result_text.find('{')
+                    end = result_text.rfind('}') + 1
+                    json_str = result_text[start:end]
+                    json.loads(json_str)  # Validate it's valid JSON
+                    return json_str
+                else:
+                    return result_text
+            except json.JSONDecodeError:
+                # If JSON parsing fails, return the raw text
+                return response.output_text
         except Exception as e:
             raise Exception(f"Error calling OpenAI API: {str(e)}")
     

@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
 """
 Test script to validate and refine the job search prompt
-Tests the OpenAI API response without sending emails
+Tests the search_jobs function from JobSearcher class without sending emails
 """
-import os
-import yaml
 import json
 from datetime import datetime
-from openai import OpenAI
-from dotenv import load_dotenv
-
-# Load environment variables from .env
-load_dotenv()
+from job_searcher import JobSearcher
 
 
 def main():
@@ -19,29 +13,19 @@ def main():
     print("Testing Job Search Prompt")
     print("="*80)
     
-    # Load configuration
+    # Initialize JobSearcher (loads config and env automatically)
     try:
-        with open('config.yaml', 'r') as f:
-            config = yaml.safe_load(f)
-    except FileNotFoundError:
-        print("\n✗ ERROR: config.yaml not found")
+        job_searcher = JobSearcher()
+        config = job_searcher.config
+    except Exception as e:
+        print(f"\n✗ ERROR: Failed to initialize JobSearcher: {e}")
         return 1
     
-    # Get OpenAI configuration
-    api_key = os.getenv('OPENAI_API_KEY')
-    if not api_key:
-        print("\n✗ ERROR: OPENAI_API_KEY not found in .env")
-        return 1
-    
+    # Display configuration
     model = config.get('openai_model', 'gpt-4')
     max_tokens = config.get('max_completion_tokens', 2000)
     prompt = config.get('job_search_prompt', '')
     
-    if not prompt:
-        print("\n✗ ERROR: No job_search_prompt found in config.yaml")
-        return 1
-    
-    # Display configuration
     print("\nOpenAI Configuration:")
     print(f"  Model: {model}")
     print(f"  Max Tokens: {max_tokens}")
@@ -50,57 +34,21 @@ def main():
     print(prompt)
     print("-" * 80)
     
-    # Initialize OpenAI client
-    client = OpenAI(api_key=api_key)
-    
-    # Make API call with web search enabled
+    # Call search_jobs function
     print("\n" + "="*80)
-    print("Calling OpenAI API with web search enabled...")
+    print("Calling search_jobs function...")
     print("="*80)
     
     try:
         start_time = datetime.now()
         
-        # Use Responses API with web_search tool for real-time job search
-        response = client.responses.create(
-            model=model,
-            tools=[{"type": "web_search"}],
-            input=prompt
-        )
+        # Call the search_jobs function
+        job_results = job_searcher.search_jobs()
         
         end_time = datetime.now()
         duration = (end_time - start_time).total_seconds()
         
-        # Extract response details
-        job_results = response.output_text
-        
-        # Note: Responses API may have different usage structure
-        usage = getattr(response, 'usage', None)
-        
-        print(f"\n✓ SUCCESS! API call completed in {duration:.2f} seconds")
-        print("\n" + "="*80)
-        print("API Response Statistics:")
-        print("="*80)
-        print(f"  Response ID: {getattr(response, 'id', 'N/A')}")
-        print(f"  Model: {getattr(response, 'model', model)}")
-        
-        # Check if web search was used
-        if hasattr(response, 'tool_calls') or 'search' in str(response).lower():
-            print(f"  ✓ Web search tool was used for real-time results")
-        
-        # Display token usage if available
-        if usage:
-            print(f"\n  Token Usage:")
-            print(f"    Prompt Tokens: {getattr(usage, 'prompt_tokens', 'N/A')}")
-            print(f"    Completion Tokens: {getattr(usage, 'completion_tokens', 'N/A')}")
-            print(f"    Total Tokens: {getattr(usage, 'total_tokens', 'N/A')}")
-            
-            # Calculate approximate cost (rough estimates for gpt-4)
-            if 'gpt-4' in model.lower() and hasattr(usage, 'total_tokens'):
-                prompt_cost = getattr(usage, 'prompt_tokens', 0) * 0.00003  # $0.03 per 1K tokens
-                completion_cost = getattr(usage, 'completion_tokens', 0) * 0.00006  # $0.06 per 1K tokens
-                total_cost = prompt_cost + completion_cost
-                print(f"    Estimated Cost: ${total_cost:.4f}")
+        print(f"\n✓ SUCCESS! search_jobs completed in {duration:.2f} seconds")
         
         print("\n" + "="*80)
         print("Job Search Results:")
@@ -120,13 +68,18 @@ def main():
         print(f"  Word Count: {word_count} words")
         print(f"  Line Count: {line_count} lines")
         
-        # Check if response was truncated (Responses API structure)
-        finish_reason = getattr(response, 'finish_reason', None)
-        if finish_reason == 'length':
-            print("\n  ⚠ WARNING: Response was truncated due to max_tokens limit")
-            print("  Consider increasing max_completion_tokens in config.yaml")
-        elif finish_reason == 'stop' or finish_reason is None:
-            print("\n  ✓ Response completed naturally (not truncated)")
+        # Check if it's valid JSON
+        is_json = False
+        parsed_json = None
+        try:
+            parsed_json = json.loads(job_results)
+            is_json = True
+            print("\n  ✓ Response is valid JSON")
+            if 'jobs' in parsed_json:
+                job_count = len(parsed_json.get('jobs', []))
+                print(f"  ✓ Found {job_count} jobs in JSON response")
+        except json.JSONDecodeError:
+            print("\n  ℹ Response is not valid JSON (plain text format)")
         
         # Quality checks
         print("\n  Quality Checks:")
@@ -146,24 +99,18 @@ def main():
         print(f"    {'✓' if has_location else '✗'} Contains location information")
         print(f"    {'✓' if has_requirements else '✗'} Contains requirements/skills")
         
-        # Save results to JSON file
+        # Save results to prompt_results.json
         results_data = {
             "timestamp": datetime.now().isoformat(),
-            "model": getattr(response, 'model', model),
-            "response_id": getattr(response, 'id', 'N/A'),
+            "model": model,
             "duration_seconds": duration,
             "prompt": prompt,
-            "job_results": job_results,
+            "is_json_format": is_json,
+            "job_results": parsed_json if is_json else job_results,
             "statistics": {
                 "result_length_chars": result_length,
                 "word_count": word_count,
-                "line_count": line_count,
-                "finish_reason": finish_reason
-            },
-            "usage": {
-                "prompt_tokens": getattr(usage, 'prompt_tokens', 'N/A') if usage else 'N/A',
-                "completion_tokens": getattr(usage, 'completion_tokens', 'N/A') if usage else 'N/A',
-                "total_tokens": getattr(usage, 'total_tokens', 'N/A') if usage else 'N/A'
+                "line_count": line_count
             },
             "quality_checks": {
                 "has_company_info": has_company,

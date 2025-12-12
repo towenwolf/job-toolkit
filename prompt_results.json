@@ -1,20 +1,90 @@
 {
-  "timestamp": "2025-12-12T11:04:46.781324",
-  "model": "gpt-5.1-2025-11-13",
-  "response_id": "resp_0be4311dd2349d0b00693c3d002e04819f86c1ef121faa1c4c",
-  "duration_seconds": 30.995268,
+  "timestamp": "2025-12-12T11:18:44.703680",
+  "model": "gpt-5.1",
+  "duration_seconds": 16.000968,
   "prompt": "Please search for and recommend the top 5 job opportunities for a Software Engineer with the following criteria:\n\n- Location: Remote or San Francisco Bay Area\n- Experience Level: Senior (5-10 years)\n- Tech Stack: Python, Docker, Kubernetes, AWS\n- Industry: Technology, SaaS\n- Company Size: Startup to mid-size (50-500 employees)\n\nFor each job, please provide:\n1. Company name\n2. Job title\n3. Location\n4. Key requirements\n5. Why this might be a good fit\n\nPlease format the results in a clear, easy-to-read structure.\n",
-  "job_results": "Here are 5 strong matches based on your criteria (remote/SF Bay, senior, Python/Docker/K8s/AWS, SaaS/tech, ~50\u2013500 employees). Always check each posting for the latest details before applying.\n\n---\n\n## 1) Archera \u2013 Senior Software Engineer (Backend)\n\n**Location**  \n- Remote \u2013 USA/Canada ([job-boards.greenhouse.io](https://job-boards.greenhouse.io/archera/jobs/4937570008?utm_source=openai))  \n\n**Key Requirements (highlights)** ([job-boards.greenhouse.io](https://job-boards.greenhouse.io/archera/jobs/4937570008?utm_source=openai))  \n- 5+ years professional software development experience.  \n- Strong Python and SQL; API/ETL development.  \n- Experience with relational DBs and data warehouses (PostgreSQL, Snowflake).  \n- SaaS application experience on AWS/Azure/GCP.  \n- Familiarity with containerized environments and CI/CD.  \n- Startup / high-growth environment experience and ability to lead projects end\u2011to\u2011end.  \n\n**Why this might be a good fit**  \n- Direct match on Python + cloud + containers; you also get exposure to data warehousing and cost-optimization SaaS.  \n- Fully remote across US/Canada, good if you want flexibility but still want to work on serious infra/data problems.  \n- Early- to mid-stage SaaS company (fits the 50\u2013500 range) working heavily in cloud optimization and automation.\n\n---\n\n## 2) Alembic \u2013 Senior Backend Engineer\n\n**Location**  \n- San Francisco, CA (onsite or hybrid; ~43 employees) ([builtin.com](https://builtin.com/job/senior-backend-engineer/7316033?utm_source=openai))  \n\n**Key Requirements (highlights)** ([builtin.com](https://builtin.com/job/senior-backend-engineer/7316033?utm_source=openai))  \n- Senior backend role at an early-stage analytics startup (AI-powered marketing analytics).  \n- Stack includes: Python, FastAPI/Flask, Postgres, Docker, Kubernetes, AWS, Terraform, plus CI/CD and Elasticsearch.  \n- Building and scaling backend services and data infrastructure for real\u2011time analytics.  \n\n**Why this might be a good fit**  \n- Very strong alignment with your tech stack: Python, Docker, Kubernetes, AWS are explicitly called out.  \n- SF-based startup of ~40 people squarely in the \u201cstartup to mid-size\u201d band.  \n- Product is SaaS analytics, so it hits the tech/SaaS industry preference while giving you interesting performance and data\u2011intensive backend challenges.\n\n---\n\n## 3) Milo \u2013 Senior Backend Engineer\n\n**Location**  \n- San Francisco, CA / Remote (US-based; hub in SF, team of ~4\u20135) ([ycombinator.com](https://www.ycombinator.com/companies/milo/jobs/myCYhHu-senior-backend-engineer?utm_source=openai))  \n\n**Key Requirements (highlights)** ([ycombinator.com](https://www.ycombinator.com/companies/milo/jobs/myCYhHu-senior-backend-engineer?utm_source=openai))  \n- 4+ years backend development (they say 4+, but they\u2019re clearly hiring at a senior level).  \n- Proficient in Python and AWS (plus Supabase, Twilio).  \n- Experience with distributed systems / backend services and APIs.  \n- Comfortable in a very small, fast\u2011moving startup team; strong ownership mindset.  \n\n**Why this might be a good fit**  \n- Clear match on Python + AWS; you\u2019d likely influence infra decisions including Docker/K8s if not already in place.  \n- YC + OpenAI-backed AI consumer SaaS (family productivity copilot), so the tech and domain are modern and interesting.  \n- Fully remote within US but with an SF hub, so you get Bay Area connection without mandatory relocation.\n\n---\n\n## 4) Dynamo AI \u2013 Senior Kubernetes Engineer\n\n**Location**  \n- San Francisco, CA / New York, NY \u2013 hybrid (2\u20133 days/week in office); team size ~40, SF HQ ([ycombinator.com](https://www.ycombinator.com/companies/dynamo-ai/jobs/fU1oC9q-senior-kubernetes-engineer?utm_source=openai))  \n\n**Key Requirements (highlights)** ([ycombinator.com](https://www.ycombinator.com/companies/dynamo-ai/jobs/fU1oC9q-senior-kubernetes-engineer?utm_source=openai))  \n- Extensive expertise in Kubernetes, Helm, and containerized app delivery.  \n- Strong experience with at least one major cloud (AWS/Azure/GCP).  \n- 4+ years in solutions architecture / DevOps / cloud engineering, including customer\u2011facing work.  \n- Focus on deploying and operating secure, scalable AI clusters (Kubernetes\u2011based) in enterprise environments.  \n\n**Why this might be a good fit**  \n- If you want to lean harder into K8s and cloud infra, this role is highly aligned with Docker/Kubernetes/AWS strengths.  \n- AI infrastructure/SaaS platform company in the ~40\u2011employee range \u2013 squarely within your preferred company size.  \n- SF office satisfies your Bay Area preference, with the added upside of working on cutting\u2011edge GenAI infra.\n\n---\n\n## 5) fal.ai \u2013 Senior Backend Engineer\n\n**Location**  \n- San Francisco, CA (downtown; relocation support, visa sponsorship) ([fal.ai](https://fal.ai/careers/4009193009?utm_source=openai))  \n\n**Key Requirements (highlights)** ([fal.ai](https://fal.ai/careers/4009193009?utm_source=openai))  \n- 5+ years building large\u2011scale, fault\u2011tolerant distributed systems and API microservices.  \n- Expert in one or more of: Python, Go, Rust.  \n- Experience with Infrastructure as Code and CI/CD.  \n- Experience with Kubernetes/containers is explicitly a plus; data infrastructure (Kafka, Airflow, etc.) also a plus.  \n\n**Why this might be a good fit**  \n- Strong fit if you want backend + infra work in a modern AI/SaaS context and already have Python + container/K8s background.  \n- SF\u2011based startup, competitive compensation, and significant ownership over distributed systems architecture.  \n- Good match for a senior engineer with 5\u201310 years who wants to work close to the infra for AI workloads.\n\n---\n\n### How to prioritize / next steps\n\nIf you want to optimize for:\n\n- **Pure remote + tight stack match**: Start with **Archera**.  \n- **Bay Area + direct Python/Docker/K8s/AWS usage in SaaS**: Look closely at **Alembic** and **Dynamo AI**.  \n- **Very small, high\u2011impact YC startup with some remote flexibility**: **Milo**.  \n- **Bay Area AI infra and distributed systems depth**: **fal.ai**.\n\nIf you share your resume or LinkedIn summary, I can help you tailor a short, role\u2011specific pitch and a concise bullet list of talking points for each of these applications.",
-  "statistics": {
-    "result_length_chars": 6179,
-    "word_count": 776,
-    "line_count": 105,
-    "finish_reason": null
+  "is_json_format": true,
+  "job_results": {
+    "jobs": [
+      {
+        "company": "AssemblyAI",
+        "title": "Senior Backend Engineer (Python)",
+        "location": "Remote (US-friendly, fully remote)",
+        "requirements": [
+          "5+ years professional experience building backend applications",
+          "4+ years working with Python and Python backend frameworks (Django, Flask, or similar)",
+          "3+ years working with common AWS services",
+          "Experience building and scaling REST APIs and event\u2011driven / real\u2011time systems",
+          "Experience with SQL and NoSQL databases",
+          "Background in startups or high\u2011growth environments; experience scaling systems to very high traffic is a plus"
+        ],
+        "why_good_fit": "Fully remote role at a fast\u2011growing ML/AI SaaS company building developer\u2011centric APIs, where your Python + AWS background and interest in scalable backend systems would be directly leveraged. While Docker/Kubernetes are not explicitly listed, the platform is cloud\u2011native and highly scalable, so containerization/orchestration experience will be useful. Company size and growth stage align well with startup/mid\u2011size preference.",
+        "url": "https://remoteok.com/remote-jobs/remote-senior-backend-engineer-python-assemblyai-111871"
+      },
+      {
+        "company": "Arize AI",
+        "title": "Senior AI Product Engineer, Backend",
+        "location": "Remote (Everywhere, including US)",
+        "requirements": [
+          "5+ years experience working with high\u2011performance backend systems",
+          "Strong experience with one or more of Go, Python, TypeScript/Node, Java, or similar",
+          "Experience building and operating complex SaaS platforms",
+          "Knowledge of public clouds and container orchestration (AWS, GCP, or Azure plus Kubernetes)",
+          "Interest in and familiarity with AI/LLM ecosystem and ML pipelines"
+        ],
+        "why_good_fit": "Remote\u2011first ML observability/SaaS company working on large\u2011scale distributed systems for AI & LLM monitoring. Your Python + AWS + Kubernetes background is directly relevant, and you\u2019ll be working on high\u2011throughput, cloud\u2011native services in a startup\u2011to\u2011mid\u2011size environment with strong technical challenges.",
+        "url": "https://wellfound.com/jobs/3390466-senior-ai-product-engineer-backend"
+      },
+      {
+        "company": "tvScientific",
+        "title": "Senior Backend Engineer (Python/Django)",
+        "location": "Remote (US)",
+        "requirements": [
+          "8+ years of experience working with Python backends (ideally Django)",
+          "Experience with web development, automated testing, CI/CD, and infrastructure management",
+          "Production experience with relational databases (MySQL; experience with Redis or other datastores is a plus)",
+          "Ability to work autonomously in a startup environment and collaborate in a remote\u2011first team",
+          "Familiarity with AWS, microservices, and containerization technologies is a plus"
+        ],
+        "why_good_fit": "Remote\u2011first Series B adtech/CTV SaaS startup in the 50\u2013200 employee range where you can own significant backend features. While Docker/Kubernetes are listed as a plus rather than core requirements, your container and AWS experience should be valuable for their microservice and infrastructure evolution.",
+        "url": "https://remotebun.com/team/tvscientific.com/jobs/be270e39-c293-4a4c-926d-f332f05d3876"
+      },
+      {
+        "company": "Pump.co",
+        "title": "Senior Backend Engineer",
+        "location": "San Francisco, CA (on\u2011site, 5 days/week)",
+        "requirements": [
+          "5+ years of experience as a backend engineer building scalable, reliable web applications (preferably in pre\u2011Series B startups)",
+          "Strong proficiency in Python (FastAPI in production)",
+          "Experience with AWS; familiarity with AWS cost and billing is a plus",
+          "Experience with Docker and container orchestration (Kubernetes)",
+          "Experience with SQL and NoSQL databases (Postgres and DynamoDB used internally)",
+          "Willingness to work on\u2011site 5 days per week in San Francisco"
+        ],
+        "why_good_fit": "YC\u2011backed early\u2011stage cloud cost\u2011optimization SaaS startup in SF that explicitly uses Python, AWS, Docker, Kubernetes, and LLM/AI. This is very close to your ideal tech stack and industry; the tradeoff is it\u2019s fully on\u2011site rather than hybrid or remote, but it strongly matches your desire for startup\u2011stage impact in the Bay Area.",
+        "url": "https://job-boards.greenhouse.io/pumpcareers/jobs/4560195008"
+      },
+      {
+        "company": "Jobgether (Talent Matching Platform, SaaS)",
+        "title": "Senior Backend Engineer - Python",
+        "location": "Remote (likely US\u2011friendly; confirm in posting/interview)",
+        "requirements": [
+          "5+ years experience developing backend systems with microservices architecture in cloud environments",
+          "Advanced proficiency in Python and SQL",
+          "Hands\u2011on experience with containerization and orchestration tools (Docker, Kubernetes, ECS)",
+          "Experience building recommendation systems and APIs",
+          "Experience with real\u2011time data processing (Kafka, Flink, or Kinesis)",
+          "Comfort working in fast\u2011paced, entrepreneurial/startup environments; strong communication and leadership skills"
+        ],
+        "why_good_fit": "Remote\u2011first SaaS company focused on AI\u2011driven talent matching, using a modern microservices stack on cloud infrastructure. This role leans heavily on Python plus Docker/Kubernetes and is squarely in the 5\u201310+ year senior band, making it a strong match for your technical background and preference for startup environments.",
+        "url": "https://jobs.lever.co/jobgether/0a0e9cfd-6409-48af-811a-3b4bea300b80"
+      }
+    ]
   },
-  "usage": {
-    "prompt_tokens": "N/A",
-    "completion_tokens": "N/A",
-    "total_tokens": 10032
+  "statistics": {
+    "result_length_chars": 5700,
+    "word_count": 642,
+    "line_count": 77
   },
   "quality_checks": {
     "has_company_info": true,
