@@ -22,7 +22,7 @@ def main():
     smtp_server = os.getenv('SMTP_SERVER')
     smtp_port = int(os.getenv('SMTP_PORT', '587'))
     sender_email = os.getenv('SENDER_EMAIL')
-    sender_password = os.getenv('SENDER_PASSWORD')
+    sender_password = os.getenv('APP_PASSWORD')
     recipient_email = os.getenv('RECIPIENT_EMAIL')
     
     # Display email configuration
@@ -35,7 +35,7 @@ def main():
     # Validate configuration
     if not all([smtp_server, sender_email, sender_password, recipient_email]):
         print("\n✗ ERROR: Missing email configuration in .env file")
-        print("Required variables: SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD, RECIPIENT_EMAIL")
+        print("Required variables: SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, APP_PASSWORD, RECIPIENT_EMAIL")
         return 1
     
     # Create test email content

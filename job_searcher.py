@@ -102,7 +102,7 @@ class JobSearcher:
                 smtp_port = 587
         
         sender_email = email_config.get('sender_email', os.getenv('SENDER_EMAIL'))
-        sender_password = email_config.get('sender_password', os.getenv('SENDER_PASSWORD'))
+        sender_password = email_config.get('sender_password', os.getenv('APP_PASSWORD'))
         recipient_email = email_config.get('recipient_email', os.getenv('RECIPIENT_EMAIL'))
         
         # Strip whitespace from credentials (handles newlines and spaces)

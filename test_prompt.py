@@ -5,6 +5,7 @@ Tests the OpenAI API response without sending emails
 """
 import os
 import yaml
+import json
 from datetime import datetime
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -144,6 +145,37 @@ def main():
         print(f"    {'✓' if has_company else '✗'} Contains company information")
         print(f"    {'✓' if has_location else '✗'} Contains location information")
         print(f"    {'✓' if has_requirements else '✗'} Contains requirements/skills")
+        
+        # Save results to JSON file
+        results_data = {
+            "timestamp": datetime.now().isoformat(),
+            "model": getattr(response, 'model', model),
+            "response_id": getattr(response, 'id', 'N/A'),
+            "duration_seconds": duration,
+            "prompt": prompt,
+            "job_results": job_results,
+            "statistics": {
+                "result_length_chars": result_length,
+                "word_count": word_count,
+                "line_count": line_count,
+                "finish_reason": finish_reason
+            },
+            "usage": {
+                "prompt_tokens": getattr(usage, 'prompt_tokens', 'N/A') if usage else 'N/A',
+                "completion_tokens": getattr(usage, 'completion_tokens', 'N/A') if usage else 'N/A',
+                "total_tokens": getattr(usage, 'total_tokens', 'N/A') if usage else 'N/A'
+            },
+            "quality_checks": {
+                "has_company_info": has_company,
+                "has_location_info": has_location,
+                "has_requirements": has_requirements
+            }
+        }
+        
+        with open('prompt_results.json', 'w') as f:
+            json.dump(results_data, f, indent=2)
+        
+        print("\n✓ Results saved to prompt_results.json")
         
         print("\n" + "="*80)
         print("Prompt Testing Complete!")
