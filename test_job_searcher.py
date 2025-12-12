@@ -137,8 +137,8 @@ email:
         <html>
             <head>
                 <style>
-                    body { font-family: Arial, sans-serif; }
-                    .test-box { border: 2px solid #3498db; padding: 20px; margin: 20px; }
+                    body {{ font-family: Arial, sans-serif; }}
+                    .test-box {{ border: 2px solid #3498db; padding: 20px; margin: 20px; }}
                 </style>
             </head>
             <body>
