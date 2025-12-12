@@ -6,6 +6,7 @@ import os
 import pytest
 import json
 from datetime import datetime
+from unittest.mock import patch, MagicMock
 from job_searcher import JobSearcher
 
 
@@ -34,8 +35,11 @@ email:
         return str(config_file)
     
     @pytest.fixture
-    def job_searcher_instance(self, config_path):
+    def job_searcher_instance(self, config_path, monkeypatch):
         """Create a JobSearcher instance with test config"""
+        # Set a dummy API key for testing if not already set
+        if not os.getenv('OPENAI_API_KEY'):
+            monkeypatch.setenv('OPENAI_API_KEY', 'sk-test-dummy-key-for-testing')
         return JobSearcher(config_path)
     
     def test_search_jobs(self, job_searcher_instance):
@@ -121,16 +125,22 @@ email:
         
         print("\n✓ search_jobs test passed successfully!")
     
-    def test_send_email(self, job_searcher_instance):
+    @patch.dict(os.environ, {'SENDER_PASSWORD': 'test-password'})
+    @patch('smtplib.SMTP')
+    def test_send_email(self, mock_smtp, job_searcher_instance):
         """
-        Test the send_email function by sending a plain test email.
+        Test the send_email function with mocked SMTP.
         
-        This test sends a simple test email to the configured recipient address.
-        Note: This requires valid SMTP credentials in the .env file.
+        This test verifies that the email sending logic works correctly
+        without actually sending emails or requiring real SMTP credentials.
         """
         print("\n" + "="*80)
-        print("TEST: send_email - Sending Test Email")
+        print("TEST: send_email - Testing Email Functionality (Mocked)")
         print("="*80)
+        
+        # Create a mock SMTP instance
+        mock_smtp_instance = MagicMock()
+        mock_smtp.return_value.__enter__.return_value = mock_smtp_instance
         
         # Create a simple test email content
         test_email_content = """
@@ -154,22 +164,32 @@ email:
         
         print("\n--- EMAIL CONFIGURATION ---")
         email_config = job_searcher_instance.config.get('email', {})
-        print(f"SMTP Server: {email_config.get('smtp_server', os.getenv('SMTP_SERVER', 'Not configured'))}")
-        print(f"SMTP Port: {email_config.get('smtp_port', os.getenv('SMTP_PORT', 'Not configured'))}")
-        print(f"Sender Email: {email_config.get('sender_email', os.getenv('SENDER_EMAIL', 'Not configured'))}")
-        print(f"Recipient Email: {email_config.get('recipient_email', os.getenv('RECIPIENT_EMAIL', 'Not configured'))}")
+        print(f"SMTP Server: {email_config.get('smtp_server', 'Not configured')}")
+        print(f"SMTP Port: {email_config.get('smtp_port', 'Not configured')}")
+        print(f"Sender Email: {email_config.get('sender_email', 'Not configured')}")
+        print(f"Recipient Email: {email_config.get('recipient_email', 'Not configured')}")
         
-        print("\n--- SENDING EMAIL ---")
+        print("\n--- SENDING EMAIL (MOCKED) ---")
         try:
             job_searcher_instance.send_email(test_email_content)
-            print("\n✓ Email sent successfully!")
-            print("Check the recipient inbox to verify the test email was delivered.")
+            print("\n✓ Email send method executed successfully!")
+            
+            # Verify SMTP interactions
+            mock_smtp.assert_called_once_with('smtp.gmail.com', 587)
+            mock_smtp_instance.starttls.assert_called_once()
+            mock_smtp_instance.login.assert_called_once_with('test@example.com', 'test-password')
+            mock_smtp_instance.send_message.assert_called_once()
+            
+            print("✓ SMTP connection was established correctly")
+            print("✓ STARTTLS was called")
+            print("✓ Login was called with correct credentials")
+            print("✓ Message was sent")
+            
         except ValueError as e:
             print(f"\n⚠ Configuration Error: {e}")
-            print("Please ensure SMTP credentials are set in .env file or config.yaml")
             pytest.skip(f"Skipping email test due to missing configuration: {e}")
         except Exception as e:
-            print(f"\n✗ Error sending email: {e}")
+            print(f"\n✗ Error in email sending logic: {e}")
             raise
         
         print("\n" + "="*80)

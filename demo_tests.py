@@ -94,8 +94,8 @@ def demo_send_email_test():
     The actual test:
     1. Creates a simple HTML test email
     2. Prints the email configuration being used
-    3. Calls send_email() to send the test email
-    4. Confirms successful sending
+    3. Uses mocked SMTP to test send_email() logic
+    4. Verifies SMTP methods are called correctly
     """
     print("\n" + "="*80)
     print("DEMO: send_email Test Structure")
@@ -103,8 +103,9 @@ def demo_send_email_test():
     print("\nWhat this test does:")
     print("1. Creates a plain HTML test email with timestamp")
     print("2. Displays the SMTP configuration being used")
-    print("3. Calls job_searcher_instance.send_email(test_content)")
-    print("4. Sends an actual email to the configured recipient")
+    print("3. Uses mocked SMTP connection (no real email sent)")
+    print("4. Calls job_searcher_instance.send_email(test_content)")
+    print("5. Verifies SMTP methods are called correctly")
     print("")
     
     print("--- EMAIL CONFIGURATION ---")
@@ -135,13 +136,16 @@ def demo_send_email_test():
     """)
     print("")
     
-    print("--- SENDING EMAIL ---")
-    print("✓ Email sent successfully!")
-    print("Check the recipient inbox to verify the test email was delivered.")
+    print("--- SENDING EMAIL (MOCKED) ---")
+    print("✓ Email send method executed successfully!")
+    print("✓ SMTP connection was established correctly")
+    print("✓ STARTTLS was called")
+    print("✓ Login was called with correct credentials")
+    print("✓ Message was sent")
     print("")
     print("="*80)
-    print("✓ This test validates that send_email() successfully sends")
-    print("  a plain test email to the configured recipient")
+    print("✓ This test validates that send_email() correctly calls SMTP methods")
+    print("  using mocking - no actual email is sent, no credentials required")
     print("="*80)
 
 
@@ -213,10 +217,10 @@ def main():
     print("   - ⚠ Requires OPENAI_API_KEY")
     print("")
     print("3. test_send_email (in TestJobSearcher class)")
-    print("   - Tests email sending functionality")
-    print("   - Sends a plain test email")
+    print("   - Tests email sending functionality with mocked SMTP")
+    print("   - Verifies SMTP methods are called correctly")
     print("   - Prints email configuration")
-    print("   - ⚠ Requires SMTP credentials in .env")
+    print("   - ✓ Does NOT require SMTP credentials (uses mocking)")
     print("")
     print("To run the actual tests:")
     print("  pytest test_job_searcher.py -v -s")
