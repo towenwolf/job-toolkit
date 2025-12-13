@@ -10,7 +10,7 @@ Job Searcher automates the tedious task of searching for jobs by leveraging your
 
 - 🤖 **AI-Powered Search**: Uses OpenAI's ChatGPT to find relevant job opportunities
 - 📧 **Email Delivery**: Formatted HTML emails with job recommendations
-- ⏰ **Configurable Schedule**: Run daily, weekly, or on custom schedules
+- ⏰ **Cron-Based Scheduling**: Reliable scheduling using native Linux cron
 - 🐳 **Docker Ready**: Easy deployment with Docker and docker-compose
 - ⚙️ **Flexible Configuration**: Customize search criteria, prompts, and schedules
 - 🏠 **Home Server Friendly**: Designed for self-hosted Linux environments
@@ -116,16 +116,18 @@ job_search_prompt: |
 
 ### Schedule Configuration
 
-Configure when the job search runs:
+Configure when the job search runs using cron scheduling:
 
 ```yaml
 schedule:
-  time: "08:00"  # 24-hour format
+  time: "08:00"  # 24-hour format (HH:MM)
   days:
     - monday
     - wednesday
     - friday
 ```
+
+The schedule is automatically converted to a cron expression when the container starts. Cron provides reliable, native Linux scheduling without requiring a Python process to run continuously.
 
 ### Email Configuration
 
@@ -200,8 +202,8 @@ pip install -r requirements.txt
 # Run once
 python job_searcher.py
 
-# Run scheduler
-python scheduler.py
+# For scheduled runs, use Docker (cron-based scheduling requires container environment)
+docker-compose up -d
 ```
 
 ## Project Structure
@@ -209,8 +211,9 @@ python scheduler.py
 ```
 job-searcher/
 ├── job_searcher.py         # Core job search and email logic
-├── scheduler.py            # Scheduling system
-├── test_api.sh             # OpenAI API test script
+├── setup_cron.py           # Generate crontab from config.yaml
+├── cron_entry.sh           # Cron job entry point
+├── docker-entrypoint.sh    # Docker startup script
 ├── requirements.txt        # Python dependencies
 ├── config.example.yaml     # Example configuration
 ├── .env.example           # Example environment variables

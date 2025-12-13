@@ -17,5 +17,5 @@ services:
       
       # Timezone (optional, defaults to UTC)
       - TZ=${TZ:-UTC}
-    # Uncomment to run in one-shot mode instead of scheduler
+    # Uncomment to run in one-shot mode instead of cron scheduler
     # command: python job_searcher.py
