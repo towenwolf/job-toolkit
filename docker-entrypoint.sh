@@ -27,6 +27,11 @@ echo "Job Searcher is now running with cron scheduler"
 echo "Logs will be available at: /var/log/cron.log"
 echo ""
 
-# Start cron in background and tail the log file
+# Start cron in background
 cron
+
+# Wait a moment for cron to start
+sleep 2
+
+# Tail the log file (keeps container running)
 tail -f /var/log/cron.log
