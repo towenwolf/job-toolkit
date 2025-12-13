@@ -34,4 +34,5 @@ cron
 sleep 2
 
 # Tail the log file (keeps container running)
-tail -f /var/log/cron.log
+# Use -F to follow and retry if file doesn't exist yet
+tail -F /var/log/cron.log
