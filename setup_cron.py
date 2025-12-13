@@ -9,7 +9,7 @@ import sys
 def load_schedule_config():
     """Load schedule configuration from config.yaml"""
     try:
-        with open('/app/config.yaml', 'r') as f:
+        with open('/tmp/test_cron/config.yaml', 'r') as f:
             config = yaml.safe_load(f)
             return config.get('schedule', {})
     except FileNotFoundError:
