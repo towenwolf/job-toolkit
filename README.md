@@ -11,7 +11,7 @@ Job Searcher automates the tedious task of searching for jobs by leveraging your
 - 🤖 **AI-Powered Search**: Uses OpenAI's ChatGPT to find relevant job opportunities
 - 📧 **Email Delivery**: Formatted HTML emails with job recommendations
 - ⏰ **Configurable Schedule**: Run daily, weekly, or on custom schedules
-- 🐳 **Docker Ready**: Easy deployment with Docker and docker-compose
+- 🐳 **Docker Ready**: Easy deployment with Docker and docker compose
 - ⚙️ **Flexible Configuration**: Customize search criteria, prompts, and schedules
 - 🏠 **Home Server Friendly**: Designed for self-hosted Linux environments
 
@@ -21,7 +21,7 @@ Job Searcher automates the tedious task of searching for jobs by leveraging your
 
 ### Prerequisites
 
-- Docker and docker-compose installed
+- Docker and docker compose installed
 - OpenAI API key (ChatGPT subscription)
 - SMTP email server access (e.g., Gmail with app password)
 
@@ -84,12 +84,12 @@ make start
 
 4. **Run with Docker Compose**
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 5. **Check logs**
    ```bash
-   docker-compose logs -f
+   docker compose logs -f
    ```
 
 ## Configuration
@@ -158,38 +158,21 @@ To use Gmail:
 
 ```bash
 # Start the scheduler
-docker-compose up -d
+docker compose up -d
 
 # View logs
-docker-compose logs -f
+docker compose logs -f
 
 # Stop the scheduler
-docker-compose down
+docker compose down
 ```
 
 ### Run Once (Manual Test)
 
 ```bash
 # Run a single job search without scheduling
-docker-compose run --rm job-searcher python job_searcher.py
+docker compose run --rm job-searcher python job_searcher.py
 ```
-
-### Test OpenAI API Connection
-
-Before running the full job search, you can test your OpenAI API connection:
-
-```bash
-# Test the API with a simple request
-./test_api.sh
-```
-
-This script will:
-- Verify your OPENAI_API_KEY is configured
-- Send a test request to the OpenAI API
-- Print the full API response
-- Display usage statistics (token counts)
-
-Make sure your `.env` file contains a valid `OPENAI_API_KEY` before running this test.
 
 ### Local Development
 
@@ -210,12 +193,11 @@ python scheduler.py
 job-searcher/
 ├── job_searcher.py         # Core job search and email logic
 ├── scheduler.py            # Scheduling system
-├── test_api.sh             # OpenAI API test script
 ├── requirements.txt        # Python dependencies
 ├── config.example.yaml     # Example configuration
 ├── .env.example           # Example environment variables
 ├── Dockerfile             # Docker image definition
-├── docker-compose.yml     # Docker Compose orchestration
+├── docker compose.yml     # Docker Compose orchestration
 └── README.md             # This file
 ```
 
@@ -236,7 +218,7 @@ job-searcher/
 ### Scheduler Not Running
 
 - Check Docker container is running: `docker ps`
-- View logs: `docker-compose logs -f`
+- View logs: `docker compose logs -f`
 - Verify timezone is set correctly: `TZ=America/New_York` in `.env`
 
 ## Customization
