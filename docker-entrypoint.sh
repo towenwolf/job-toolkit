@@ -27,5 +27,6 @@ echo "Job Searcher is now running with cron scheduler"
 echo "Logs will be available at: /var/log/cron.log"
 echo ""
 
-# Start cron in foreground and tail the log file
-cron && tail -f /var/log/cron.log
+# Start cron in background and tail the log file
+cron
+tail -f /var/log/cron.log

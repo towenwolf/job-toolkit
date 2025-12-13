@@ -22,7 +22,7 @@ COPY config.example.yaml .
 RUN touch .env
 
 # Make scripts executable
-RUN chmod +x /app/cron_entry.sh /app/setup_cron.py
+RUN chmod +x /app/cron_entry.sh
 
 # Create log file for cron
 RUN touch /var/log/cron.log
